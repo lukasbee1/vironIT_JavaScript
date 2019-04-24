@@ -1,23 +1,36 @@
 import EventEmitter from './EventEmitter';
 
-export default function Queue() {
-  EventEmitter.call(this);
-  this.count = 0;
-}
-
-Queue.prototype = Object.create(EventEmitter.prototype);
-Queue.prototype.constructor = EventEmitter;
-
-Queue.prototype.newQuery = function() {
-  this.count++;
-  this.emit('number of count', this.count);
-}
-
-Queue.prototype.generate = function(min, max) {
-  let rand = Math.floor(Math.random() * (max - min + 1) + min);
+export default class Queue extends EventEmitter {
+  constructor() {
+    super();
+    this.count = 0;
+  }
   
-  setInterval(() => {
-    this.newQuery(this.count);
-  }, rand);
-
+  getCount() {
+    //emit('queueCount', this.count);
+    return this.count;
+  }
 }
+
+
+
+
+
+// Queue.prototype.addPerson = function() {
+//   this.count++;
+//   this.emit('number', this.count);
+// }
+// Queue.prototype.removePerson = function() {
+//   this.count--;
+//   this.emit('number', this.count);
+// }
+
+// Queue.prototype.generate = function(min, max) {
+//   let rand = Math.floor(Math.random() * (max - min + 1) + min);
+  
+//   setTimeout(() => {
+//     this.newQuery(this.count);
+//     this.generate(min,max);
+//   }, rand);
+
+// }

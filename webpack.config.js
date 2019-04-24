@@ -10,11 +10,17 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /.\js$/,
-        exclude: /node_modules/,
-        use: [
-          { loader: "babel-loader" }
-        ]
+        test: /\.js$/,
+        loader: 'babel-loader',
+        query: {
+          "presets": [
+            "@babel/preset-env",
+            
+          ],
+          "plugins": [
+            "@babel/plugin-proposal-class-properties"
+          ]
+        }
       }
     ]
   },

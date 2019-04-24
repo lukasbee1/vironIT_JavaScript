@@ -1,19 +1,27 @@
 import EventEmitter from './EventEmitter';
 
-export default function Atm() {
-  EventEmitter.call(this);
-  this.state = 'free';
-  this.count = 0;
+export default class Atm extends EventEmitter {
+  constructor() {
+    super();
+    this.state = 'free';
+    this.count = 0;
+  }
+  
+  getStatus() {
+    return this.state;
+  }
+  _free() {
+    this.state = 'free';
+    this.emit('status', this.state);
+  }
+  working() {
+    this.count++;
+    this.state = 'busy';
+    this.emit('status', this.state);
+  }
 }
-Atm.prototype = Object.create(EventEmitter.prototype);
-Atm.prototype.constructor = EventEmitter;
 
-Atm.prototype.working = function(){
-  this.count++;
-  this.state = 'busy';
-  console.log("Atm is working, state:" + this.state);
-  this.emit('balance');
-}
+
 
 
 
