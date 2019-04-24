@@ -7,7 +7,4 @@ bancomat.on('balance', () => {console.log("checked balace");});
 bancomat.working();
 
 let queue = new Queue();
-queue.newQuery(1);
-queue.newQuery(2);
-queue.newQuery(3);
-
+queue.generate(1000,5000);

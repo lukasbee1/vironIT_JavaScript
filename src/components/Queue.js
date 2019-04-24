@@ -8,7 +8,16 @@ export default function Queue() {
 Queue.prototype = Object.create(EventEmitter.prototype);
 Queue.prototype.constructor = EventEmitter;
 
-Queue.prototype.newQuery = function(count) {
+Queue.prototype.newQuery = function() {
   this.count++;
-  this.emit('number of count', count);
+  this.emit('number of count', this.count);
+}
+
+Queue.prototype.generate = function(min, max) {
+  let rand = Math.floor(Math.random() * (max - min + 1) + min);
+  
+  setInterval(() => {
+    this.newQuery(this.count);
+  }, rand);
+
 }
