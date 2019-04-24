@@ -1,4 +1,4 @@
-function EventEmitter() {
+export default function EventEmitter() {
   this.eventTable = {};
 }
 
@@ -22,14 +22,7 @@ EventEmitter.prototype.on = function (eventName, fn) {
     this.eventTable[eventName] = this.eventTable[eventName].filter(eventFn => fn !== eventFn);
   }
 }
-// ATM Class
-function Atm()  {
-  this.state = 'free';
-  this.count = 0;
-}
 
-Atm.prototype = Object.create(EventEmitter.prototype);
-Atm.prototype.constructor = EventEmitter;
 
 
 

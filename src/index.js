@@ -1,2 +1,7 @@
 // entry point
-console.log(1212);
+import Atm from './components/Atm';
+
+
+let bancomat = new Atm();
+bancomat.on('balance', () => {console.log("checked balace");});
+bancomat.working();
