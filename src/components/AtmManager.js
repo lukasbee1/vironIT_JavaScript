@@ -64,18 +64,19 @@ export default class AtmManager extends EventEmitter {
   }
   start = () => {
     this.queue.on('queueCount', () => {
-      if (this.queue.count > 1) {
-        this.atmTable.forEach(atm => {
-          if (atm.getStatus() === 'free') {
-            atm.working();
+      if (this.queue.count > 0) {
+        for (let i = 0; i < this.atmTable.length; i++ ) {
+          if (this.atmTable[i].getStatus() === 'free') {
             this.removePerson();
+            this.atmTable[i].working();
             setTimeout(() => {
               setTimeout(() => {
-                atm._free();
-              }, 3000);
+                this.atmTable[i]._free();
+              }, 5000);
             }, 1000);
+            break;
           }
-        });
+        }
       }
     })
 
