@@ -1,6 +1,4 @@
 // entry point
-import Atm from './components/Atm';
-import Queue from './components/Queue';
 import AtmManager from './components/AtmManager'
 
 
@@ -9,10 +7,25 @@ let manager = new AtmManager();
 
 manager.addAtm();
 manager.addAtm();
-manager.addAtm();
 manager.startLogging();
+manager.addPerson();
+manager.addPerson();
+manager.addPerson();
+manager.addPerson();
+manager.addPerson();
+manager.addPerson();
+manager.addPerson();
+manager.addPerson();
+manager.addPerson();
+manager.addPerson();
+manager.addPerson();
+manager.addPerson();
+manager.addPerson();
+manager.addPerson();
+manager.addPerson();
 manager.start();
-manager.createQueue(2000,3000);
+manager.startWork();
+//manager.createQueue(2000,3000);
 
 
 //  let bancomat = new Atm();
