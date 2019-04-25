@@ -4,13 +4,13 @@ export default class Logger {
     console.log("Atm busy!");
   }
   AtmFree() {
-    console.log("Atm free");
+    console.log("Atm free! Just 1 second");
   }
   AtmReady() {
     console.log("Atm ready to work");
   }
   QueueUpdated(count) {
-    console.log("Members in queue: " + count);
+    console.log("Updated! Members in queue: " + count);
   }
   Waiting() {
     console.log("Waiting...");

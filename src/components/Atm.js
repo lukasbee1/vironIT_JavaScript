@@ -12,12 +12,12 @@ export default class Atm extends EventEmitter {
   }
   _free() {
     this.state = 'free';
-    this.emit('status', this.state);
+    this.emit('free', this.state);
   }
   working() {
     this.count++;
     this.state = 'busy';
-    this.emit('status', this.state);
+    this.emit('busy', this.state);
   }
 }
 
