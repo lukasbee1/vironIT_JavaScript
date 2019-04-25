@@ -8,7 +8,6 @@ export default class AtmManager extends EventEmitter {
   constructor() {
     super();
     this.atmTable = [];
-    this.atm = new Atm();
     this.queue = new Queue();
     this.logger = new Logger();
   }
@@ -36,10 +35,6 @@ export default class AtmManager extends EventEmitter {
       }
     });
   }
-  addAtm() {
-    const atm = new Atm();
-    this.atmTable.push(atm);
-  }
 
   startLogging() {
     this.queue.on('queueCount', () => {
@@ -62,24 +57,44 @@ export default class AtmManager extends EventEmitter {
       });
     });
   }
+  addAtm() {
+    const atm = new Atm();
+    this.atmTable.push(atm);
+  }
+
   start = () => {
     this.queue.on('queueCount', () => {
-      if (this.queue.count > 0) {
-        for (let i = 0; i < this.atmTable.length; i++ ) {
+      if (this.queue.getCount() === 1) {
+        for (let i = 0; i < this.atmTable.length; i++) {
           if (this.atmTable[i].getStatus() === 'free') {
-            this.removePerson();
             this.atmTable[i].working();
+            this.removePerson();
             setTimeout(() => {
               setTimeout(() => {
                 this.atmTable[i]._free();
               }, 5000);
             }, 1000);
             break;
+
           }
         }
       }
-    })
+    });
+    //subscribe on each atm
+    this.atmTable.forEach(atm => {
+      atm.on('free', () => {
+        if (this.queue.getCount() > 1) {
+          setTimeout(() => {
+            atm.working();
+            this.removePerson();
 
+            setTimeout(() => {
+              atm._free();
+            }, 5000);
+          }, 1000);
 
+        }
+      });
+    });
   }
 }

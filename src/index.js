@@ -9,9 +9,10 @@ let manager = new AtmManager();
 
 manager.addAtm();
 manager.addAtm();
+manager.addAtm();
 manager.startLogging();
 manager.start();
-manager.createQueue(1000,6000);
+manager.createQueue(2000,3000);
 
 
 //  let bancomat = new Atm();
