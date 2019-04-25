@@ -7,9 +7,14 @@ import AtmManager from './components/AtmManager'
 let manager = new AtmManager();
 
 
-manager.start();
+manager.addAtm();
+manager.addAtm();
+manager.addAtm();
+manager.addAtm();
+manager.addAtm();
 manager.startLogging();
-manager.createQueue(1000,7000);
+manager.start();
+manager.createQueue(100,500);
 
 
 //  let bancomat = new Atm();
