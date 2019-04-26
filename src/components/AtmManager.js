@@ -51,11 +51,12 @@ export default class AtmManager extends EventEmitter {
       this.startWork();
     });
     atm.on('busy', () => {
+      this.queue.removePerson();
       setTimeout(() => {
         if (!this.isFreeAtm(atm)) {
           atm._free();
         }
-      }, 2000);
+      }, 5000);
     });
     this.atmTable.push(atm);
   }
@@ -72,10 +73,11 @@ export default class AtmManager extends EventEmitter {
         setTimeout(() => {
           if (this.queue.getCount() > 0 && freeAtm.state === 'free') {
             freeAtm.working();
-            this.queue.removePerson();
+            let secAtm = this.atmTable.find(this.isFreeAtm);
+            if (!secAtm) this.emit('allBusy');
           }
-        }, 1000);
-      } else this.emit('allBusy');
+        }, 2000);
+      } 
 
     }
   }

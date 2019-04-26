@@ -7,37 +7,13 @@ let manager = new AtmManager();
 manager.queue.addPerson();
 manager.queue.addPerson();
 manager.queue.addPerson();
-manager.queue.addPerson();
-manager.queue.addPerson();
-manager.queue.addPerson();
-manager.queue.addPerson();
-manager.queue.addPerson();
-manager.queue.addPerson();
-manager.queue.addPerson();
-manager.queue.addPerson();
-manager.queue.addPerson();
-manager.queue.addPerson();
-manager.queue.addPerson();
-manager.queue.addPerson();
-manager.queue.addPerson();
-manager.queue.addPerson();
-manager.queue.addPerson();
-manager.queue.addPerson();
-manager.queue.addPerson();
-manager.addAtm();
-manager.addAtm();
-manager.addAtm();
-manager.addAtm();
-manager.addAtm();
-manager.addAtm();
-manager.addAtm();
 manager.addAtm();
 manager.addAtm();
 manager.start();
 manager.queue.addPerson();
 
 manager.startLogging();
-manager.createQueue(1000,5000);
+//manager.createQueue(1000,5000);
 
 
 //  let bancomat = new Atm();
