@@ -8,24 +8,17 @@ export default class AtmManager extends EventEmitter {
   constructor() {
     super();
     this.atmTable = [];
-    this.atm = new Atm();
     this.queue = new Queue();
     this.logger = new Logger();
-  }
-  addPerson() {
-    this.queue.count++;
-    this.queue.emit('queueCount', this.queue.count);
+    this.unsubscribeFromWaiting = null;
+
   }
 
-  removePerson() {
-    this.queue.count--;
-    this.queue.emit('queueCount', this.queue.count);
-  }
   createQueue(min, max) {
     let rand = Math.floor(Math.random() * (max - min + 1) + min);
 
     setTimeout(() => {
-      this.addPerson();
+      this.queue.addPerson();
       this.createQueue(min, max);
     }, rand);
   }
@@ -35,16 +28,16 @@ export default class AtmManager extends EventEmitter {
       this.logger.QueueUpdated(this.queue.getCount());
     });
 
-    this.atmTable.forEach(atm => {
-      atm.on('free', () => {
-        this.logger.AtmFree(this.queue.count);
+    for (let i = 0; i < this.atmTable.length; i++) {
+      this.atmTable[i].on('free', () => {
+        this.logger.AtmFree(this.queue.count, i + 1);
       });
-    });
-    this.atmTable.forEach(atm => {
-      atm.on('busy', () => {
-        this.logger.AtmBusy();
+    }
+    for (let i = 0; i < this.atmTable.length; i++) {
+      this.atmTable[i].on('busy', () => {
+        this.logger.AtmBusy(i + 1);
       });
-    });
+    }
     this.on('allBusy', () => {
       this.logger.AllBusy();
     })
@@ -54,49 +47,42 @@ export default class AtmManager extends EventEmitter {
   }
   addAtm() {
     const atm = new Atm();
+    atm.on('free', () => {
+      this.startWork();
+    });
+    atm.on('busy', () => {
+      setTimeout(() => {
+        if (!this.isFreeAtm(atm)) {
+          atm._free();
+        }
+      }, 2000);
+    });
     this.atmTable.push(atm);
   }
-  waitingFreeATM = () => {
-      for (let i = 0; i < this.atmTable.length; i++) {
-        this.atmTable[i].on('free', () => {
-          this.emit('foundedFreeAtm', this.atmTable[i]);
-        });
-      }
-  }
-  
-  startWork = () => {
-    let bool = false;
-    if (this.queue.getCount() > 0) {
-      for (let i = 0; i < this.atmTable.length; i++) {
-        if (this.atmTable[i].getStatus() === 'free') {
-          setTimeout(() => {
-            this.atmTable[i].working();
-            this.removePerson();
-            setTimeout(() => {
-              this.atmTable[i]._free();
-            }, 5000);
-          }, 1000);
-          if (i === this.atmTable.length-1) {
-            
-              this.emit('allBusy');
-              if (!bool){
-                this.waitingFreeATM();
-                
-              }
-              
-              this.on('foundedFreeAtm', () => {
-                this.startWork();
-                bool = false;
-              });
-            
 
+  isFreeAtm = (atm) => {
+    return atm.state === 'free'
+  }
+
+  startWork = () => {
+    if (this.queue.getCount() > 0) {
+      let freeAtm = this.atmTable.find(this.isFreeAtm);
+      if (freeAtm) {
+        //this.emit('foundedFreeAtm', this.atmTable);
+        setTimeout(() => {
+          if (this.queue.getCount() > 0 && freeAtm.state === 'free') {
+            freeAtm.working();
+            this.queue.removePerson();
           }
-          break;
-        }
-      }
+        }, 1000);
+      } else this.emit('allBusy');
+
     }
   }
+
   start = () => {
-    this.queue.on('queueCount', this.startWork);
+    this.queue.on('queueCount', () => { 
+      this.startWork() ;
+    });
   }
 }

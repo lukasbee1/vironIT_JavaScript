@@ -1,10 +1,10 @@
 
 export default class Logger {
-  AtmBusy() {
-    console.log("Atm busy!");
+  AtmBusy(i) {
+    console.log(i + " Atm busy!");
   }
-  AtmFree(count) {
-    console.log("Atm free! Just 1 second");
+  AtmFree(count, i) {
+    console.log(i + " Atm free! Just 1 second");
     //console.log("members in queue: " + count);
   }
   AtmReady() {
@@ -20,6 +20,6 @@ export default class Logger {
     console.log("All atms busy, wait...");
   }
   FoundedFreeAtm() {
-    console.log("Founded Free Atm");
+    console.log("Found Free Atm");
   }
 }

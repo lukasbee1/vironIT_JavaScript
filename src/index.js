@@ -4,28 +4,40 @@ import AtmManager from './components/AtmManager'
 
 let manager = new AtmManager();
 
-
+manager.queue.addPerson();
+manager.queue.addPerson();
+manager.queue.addPerson();
+manager.queue.addPerson();
+manager.queue.addPerson();
+manager.queue.addPerson();
+manager.queue.addPerson();
+manager.queue.addPerson();
+manager.queue.addPerson();
+manager.queue.addPerson();
+manager.queue.addPerson();
+manager.queue.addPerson();
+manager.queue.addPerson();
+manager.queue.addPerson();
+manager.queue.addPerson();
+manager.queue.addPerson();
+manager.queue.addPerson();
+manager.queue.addPerson();
+manager.queue.addPerson();
+manager.queue.addPerson();
 manager.addAtm();
 manager.addAtm();
-manager.startLogging();
-manager.addPerson();
-manager.addPerson();
-manager.addPerson();
-manager.addPerson();
-manager.addPerson();
-manager.addPerson();
-manager.addPerson();
-manager.addPerson();
-manager.addPerson();
-manager.addPerson();
-manager.addPerson();
-manager.addPerson();
-manager.addPerson();
-manager.addPerson();
-manager.addPerson();
+manager.addAtm();
+manager.addAtm();
+manager.addAtm();
+manager.addAtm();
+manager.addAtm();
+manager.addAtm();
+manager.addAtm();
 manager.start();
-manager.startWork();
-//manager.createQueue(2000,3000);
+manager.queue.addPerson();
+
+manager.startLogging();
+manager.createQueue(1000,5000);
 
 
 //  let bancomat = new Atm();
