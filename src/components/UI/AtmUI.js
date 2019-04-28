@@ -12,7 +12,7 @@ export default class AtmUI extends EventEmitter {
     atm.innerHTML = '<h1>ATM</h1>';
     atm.setAttribute('class', 'atm free');
     atm.setAttribute('id', i);
-    
+
     this.atmTable.push(atm);
   }
   setBusy(id) {
@@ -23,13 +23,12 @@ export default class AtmUI extends EventEmitter {
     let atm = document.getElementById(id);
     atm.setAttribute('class', 'atm free');
   }
-  
-  renderATMs() {
-    let entry = document.getElementById("entry");
 
+  renderATMs() {
+    let entry = document.getElementsByClassName("atms");
 
     this.atmTable.forEach(atm => {
-      entry.appendChild(atm);
+      entry[0].appendChild(atm);
     });
   }
 } 

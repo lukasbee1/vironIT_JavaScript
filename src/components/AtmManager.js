@@ -3,6 +3,7 @@ import Atm from './Atm';
 import Queue from './Queue';
 import Logger from './Logger';
 import AtmUI from './UI/AtmUI';
+import QueueUI from './UI/QueueUI';
 
 
 export default class AtmManager extends EventEmitter {
@@ -13,19 +14,11 @@ export default class AtmManager extends EventEmitter {
     this.queue = new Queue();
     this.logger = new Logger();
     this.atmUI = new AtmUI();
-  }
-
-  subscribeUI(count) {
-    this.atmTable.forEach((atm, i) => {
-      atm.on('free', () => {  
-        this.atmUI.setFree(i);
-      });
-      atm.on('busy', () => {
-        this.atmUI.setBusy(i);
-      });
-    });
+    this.queueUI = new QueueUI();
 
   }
+
+
 
   createQueue(min, max) {
     let rand = Math.floor(Math.random() * (max - min + 1) + min);
@@ -39,29 +32,35 @@ export default class AtmManager extends EventEmitter {
   startLogging() {
     this.queue.on('queueCount', () => {
       this.logger.QueueUpdated(this.queue.getCount());
+      this.queueUI.updateQueue(this.queue.count);
+
     });
 
-    for (let i = 0; i < this.atmTable.length; i++) {
-      this.atmTable[i].on('free', () => {
+    this.atmTable.forEach((atm, i) => {
+      atm.on('free', () => {
         this.logger.AtmFree(this.queue.count, i + 1);
+        this.atmUI.setFree(i);
       });
-    }
-    for (let i = 0; i < this.atmTable.length; i++) {
-      this.atmTable[i].on('busy', () => {
+    });
+
+    this.atmTable.forEach((atm, i) => {
+      atm.on('busy', () => {
         this.logger.AtmBusy(i + 1);
+        this.atmUI.setBusy(i);
       });
-    }
+    });
+
     this.on('allBusy', () => {
       this.logger.AllBusy();
     })
-    this.on('foundedFreeAtm', () => {
+    this.on('foundedAtm', () => {
       this.logger.FoundedFreeAtm();
     })
   }
-  
+
   addAtm() {
-    this.count++;
     const atm = new Atm();
+    this.atmUI.drawATM(this.count++);
     atm.on('free', () => {
       this.startWork();
     });
@@ -75,7 +74,6 @@ export default class AtmManager extends EventEmitter {
     });
     this.atmTable.push(atm);
     this.emit('foundedAtm', this.atmTable);
-    this.atmUI.drawATM(this.count);
   }
 
   isFreeAtm = (atm) => {
@@ -90,19 +88,19 @@ export default class AtmManager extends EventEmitter {
         setTimeout(() => {
           if (this.queue.getCount() > 0 && freeAtm.state === 'free') {
             freeAtm.working();
-            if (this.atmTable[this.atmTable.length-1].getState() === 'busy') {
+            if (this.atmTable[this.atmTable.length - 1].getState() === 'busy') {
               this.emit('allBusy');
             }
           }
-        }, 2000);
-      } 
-
+        }, 1000);
+      }
     }
   }
 
   start = () => {
-    this.queue.on('queueCount', () => { 
-      this.startWork() ;
+    this.queue.on('queueCount', () => {
+      this.startWork();
     });
+    this.atmUI.renderATMs();
   }
 }
