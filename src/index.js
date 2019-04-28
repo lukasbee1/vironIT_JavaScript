@@ -1,5 +1,7 @@
 // entry point
-import AtmManager from './components/AtmManager'
+import './css/style.css';
+import AtmManager from './components/AtmManager';
+import AtmUI from './components/UI/AtmUI';
 
 
 let manager = new AtmManager();
@@ -13,7 +15,12 @@ manager.start();
 manager.queue.addPerson();
 
 manager.startLogging();
-//manager.createQueue(1000,5000);
+manager.subscribeUI();
+let atmUI = new AtmUI();
+atmUI.drawATM(0);
+atmUI.drawATM(1);
+atmUI.renderATMs();
+manager.createQueue(1000,5000);
 
 
 //  let bancomat = new Atm();
