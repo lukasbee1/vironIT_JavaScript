@@ -5,20 +5,16 @@ import Logger from './Logger';
 import AtmUI from './UI/AtmUI';
 import QueueUI from './UI/QueueUI';
 
-
 export default class AtmManager extends EventEmitter {
   constructor() {
     super();
     this.count = 0;
     this.atmTable = [];
     this.queue = new Queue();
-    this.logger = new Logger();
-    this.atmUI = new AtmUI();
     this.queueUI = new QueueUI();
-
+    this.atmUI = new AtmUI();
+    this.logger = new Logger();
   }
-
-
 
   createQueue(min, max) {
     let rand = Math.floor(Math.random() * (max - min + 1) + min);
@@ -38,7 +34,7 @@ export default class AtmManager extends EventEmitter {
 
     this.atmTable.forEach((atm, i) => {
       atm.on('free', () => {
-        this.logger.AtmFree(this.queue.count, i + 1);
+        this.logger.AtmFree(this.queue.count  , i + 1);
         this.atmUI.setFree(i);
       });
     });
@@ -55,6 +51,7 @@ export default class AtmManager extends EventEmitter {
     })
     this.on('foundedAtm', () => {
       this.logger.FoundedFreeAtm();
+      this.atmUI.drawATM(this.count);
     })
   }
 
@@ -75,7 +72,17 @@ export default class AtmManager extends EventEmitter {
     this.atmTable.push(atm);
     this.emit('foundedAtm', this.atmTable);
   }
+  
+  createAtmListener() {
+    let btn = document.createElement('button');
+    let parent = document.getElementById('down')
 
+    btn.innerHTML = 'Add ATM';
+    btn.setAttribute('class', 'btn');
+    btn.setAttribute('id', 'addBtn');
+    parent.appendChild(btn);
+    btn.addEventListener('click', ()  => this.addAtm()); 
+  }
   isFreeAtm = (atm) => {
     return atm.state === 'free'
   }
@@ -86,7 +93,7 @@ export default class AtmManager extends EventEmitter {
       if (freeAtm) {
         //this.emit('foundedFreeAtm', this.atmTable);
         setTimeout(() => {
-          if (this.queue.getCount() > 0 && freeAtm.state === 'free') {
+        if (this.queue.getCount() > 0 && freeAtm.state === 'free') {
             freeAtm.working();
             if (this.atmTable[this.atmTable.length - 1].getState() === 'busy') {
               this.emit('allBusy');
@@ -101,6 +108,5 @@ export default class AtmManager extends EventEmitter {
     this.queue.on('queueCount', () => {
       this.startWork();
     });
-    this.atmUI.renderATMs();
   }
 }

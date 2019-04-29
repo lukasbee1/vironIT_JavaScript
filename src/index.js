@@ -9,10 +9,9 @@ let manager = new AtmManager();
 manager.addAtm();
 manager.addAtm();
 manager.addAtm();
-manager.addAtm();
-manager.addAtm();
 manager.startLogging();
 manager.start();
+manager.createAtmListener();
 // manager.queue.addPerson();
 
 

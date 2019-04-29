@@ -8,10 +8,13 @@ export default class AtmUI extends EventEmitter {
   }
   drawATM(i) {
     let atm = document.createElement('div');
+    let entry = document.getElementsByClassName("atms");
+
 
     atm.innerHTML = '<h1>ATM</h1>';
     atm.setAttribute('class', 'atm free');
     atm.setAttribute('id', i);
+    entry[0].appendChild(atm);
 
     this.atmTable.push(atm);
   }
@@ -23,12 +26,18 @@ export default class AtmUI extends EventEmitter {
     let atm = document.getElementById(id);
     atm.setAttribute('class', 'atm free');
   }
+  
+  // renderATMs() {
+  //   let entry = document.getElementsByClassName("atms");
 
-  renderATMs() {
-    let entry = document.getElementsByClassName("atms");
-
-    this.atmTable.forEach(atm => {
-      entry[0].appendChild(atm);
-    });
+  //   this.atmTable.forEach(atm => {
+  //     entry[0].appendChild(atm);
+  //   });
+  // }
+  createAtmButton(id) {
+    let parent = document.getElementById('down')
+    let element = document.getElementById(id);
+    console.log(element);
+    
   }
 } 
