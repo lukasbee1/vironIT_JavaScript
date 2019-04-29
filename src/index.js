@@ -6,12 +6,12 @@ import AtmManager from './components/AtmManager';
 let manager = new AtmManager();
 
 //atmUI.renderATMs();
-manager.addAtm();
-manager.addAtm();
-manager.addAtm();
 manager.startLogging();
-manager.start();
 manager.createAtmListener();
+manager.addAtm();
+manager.addAtm();
+manager.addAtm();
+manager.start();
 // manager.queue.addPerson();
 
 

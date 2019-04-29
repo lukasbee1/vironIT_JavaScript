@@ -3,41 +3,26 @@ import EventEmitter from '../EventEmitter';
 export default class AtmUI extends EventEmitter {
   constructor() {
     super();
-    this.atmTable = [];
-
+    this.atm = null;
+    this.uniqueId = null;
   }
-  drawATM(i) {
-    let atm = document.createElement('div');
+  drawATM() {
+    let atmBlock = document.createElement('div');
     let entry = document.getElementsByClassName("atms");
+    this.atm = atmBlock;
 
+    atmBlock.innerHTML = '<h1>ATM</h1>';
+    atmBlock.setAttribute('class', 'atm free');
+    entry[0].appendChild(atmBlock);
 
-    atm.innerHTML = '<h1>ATM</h1>';
-    atm.setAttribute('class', 'atm free');
-    atm.setAttribute('id', i);
-    entry[0].appendChild(atm);
-
-    this.atmTable.push(atm);
   }
-  setBusy(id) {
-    let atm = document.getElementById(id);
-    atm.setAttribute('class', 'atm busy');
+  setUniqueId(id) {
+    this.uniqueId = id;
   }
-  setFree(id) {
-    let atm = document.getElementById(id);
-    atm.setAttribute('class', 'atm free');
+  setBusy() {
+    this.atm.setAttribute('class', 'atm busy');
   }
-  
-  // renderATMs() {
-  //   let entry = document.getElementsByClassName("atms");
-
-  //   this.atmTable.forEach(atm => {
-  //     entry[0].appendChild(atm);
-  //   });
-  // }
-  createAtmButton(id) {
-    let parent = document.getElementById('down')
-    let element = document.getElementById(id);
-    console.log(element);
-    
+  setFree() {
+    this.atm.setAttribute('class', 'atm free');
   }
 } 
