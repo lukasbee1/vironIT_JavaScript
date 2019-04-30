@@ -4,9 +4,8 @@ export default class AtmUI extends EventEmitter {
   constructor() {
     super();
     this.atm = null;
-    this.uniqueId = null;
   }
-  drawATM() {
+  drawAtm() {
     let atmBlock = document.createElement('div');
     let entry = document.getElementsByClassName("atms");
     this.atm = atmBlock;
@@ -16,13 +15,16 @@ export default class AtmUI extends EventEmitter {
     entry[0].appendChild(atmBlock);
 
   }
-  setUniqueId(id) {
-    this.uniqueId = id;
-  }
+  
   setBusy() {
     this.atm.setAttribute('class', 'atm busy');
   }
   setFree() {
     this.atm.setAttribute('class', 'atm free');
+  }
+  removeAtm() {
+    let entry = document.getElementsByClassName("atms");
+    entry[0].removeChild(this.atm);
+
   }
 } 

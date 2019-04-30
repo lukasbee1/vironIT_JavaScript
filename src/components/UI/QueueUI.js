@@ -12,9 +12,9 @@ export default class QueueUI extends EventEmitter {
   }
   updateQueue(count) {
     let old = document.getElementsByClassName("queueCount")
-    let queueCount = document.createElement('h2');
+    let queueCount = document.createElement('div');
 
-    queueCount.innerHTML = count;
+    queueCount.innerHTML = `<h2>${count}</h2>`;
     queueCount.setAttribute('class', 'queueCount');
 
     let entry = document.getElementsByClassName("queue");

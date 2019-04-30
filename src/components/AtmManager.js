@@ -13,7 +13,6 @@ export default class AtmManager extends EventEmitter {
     this.atmUiTable = [];
     this.queue = new Queue();
     this.queueUI = new QueueUI();
-    //this.atmUI = new AtmUI();
     this.logger = new Logger();
   }
 
@@ -50,18 +49,19 @@ export default class AtmManager extends EventEmitter {
     })
     this.on('foundedAtm', () => {
       this.logger.FoundedFreeAtm();
-
-      //this.atmUI.drawATM(this.count-1);
     })
   }
-
+  
   addAtm() {
     const atm = new Atm();
     const atmUI = new AtmUI();
     this.count++;
 
-    atmUI.drawATM(atm);
-
+    atmUI.drawAtm(atm);
+    atmUI.on('deleted', () => {
+      console.log('asdfasdfasdf');
+      atmUI.removeAtm();
+    })
     atm.on('free', () => {
       this.startWork();
       atmUI.setFree();
@@ -76,20 +76,37 @@ export default class AtmManager extends EventEmitter {
         }
       }, 5000);
     });
-    this.emit('foundedAtm', this.atmTable);
+    this.emit('foundedAtm');
     this.atmTable.push(atm);
     this.atmUiTable.push(atmUI);
+    console.log(this.atmTable)
+  }
+  removeAtm() {
+    this.atmTable.pop();
+    const UI = this.atmUiTable.pop();
+    UI.emit('deleted', this.atmTable);
+    
   }
 
   createAtmListener() {
     let btn = document.createElement('button');
-    let parent = document.getElementById('down')
+    let parent = document.getElementById('down');
 
-    btn.innerHTML = 'Add ATM';
+    btn.innerHTML = '<h2>Add ATM</h2>';
     btn.setAttribute('class', 'btn');
     btn.setAttribute('id', 'addBtn');
     parent.appendChild(btn);
     btn.addEventListener('click', () => this.addAtm());
+  }
+  createRemoveButton() {
+    let btn = document.createElement('button');
+    let parent = document.getElementById('down');
+    btn.innerHTML = '<h2>Remove ATM</h2>';
+    btn.setAttribute('class', 'btn');
+    btn.setAttribute('id', 'addBtn');
+    parent.appendChild(btn);
+    btn.addEventListener('click', () => this.removeAtm());
+
   }
   isFreeAtm = (atm) => {
     return atm.state === 'free'

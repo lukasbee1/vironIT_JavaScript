@@ -8,6 +8,7 @@ let manager = new AtmManager();
 //atmUI.renderATMs();
 manager.startLogging();
 manager.createAtmListener();
+manager.createRemoveButton();
 manager.addAtm();
 manager.addAtm();
 manager.addAtm();
