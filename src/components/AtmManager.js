@@ -56,15 +56,21 @@ export default class AtmManager extends EventEmitter {
     const atm = new Atm();
     const atmUI = new AtmUI();
     this.count++;
-
     atmUI.drawAtm(atm);
     atmUI.on('deleted', () => {
-      console.log('asdfasdfasdf');
       atmUI.removeAtm();
     })
     atm.on('free', () => {
       this.startWork();
       atmUI.setFree();
+      atmUI.changeCounter(atm);
+      const served = atm.count;
+      setTimeout(() => {
+        if (atm.getState() === 'free' && served === atm.count) {
+         console.log('atm "free" more than 4 second'); 
+        this.removeAtm();
+        }
+      }, 4000);
 
     });
     atm.on('busy', () => {
@@ -76,15 +82,17 @@ export default class AtmManager extends EventEmitter {
         }
       }, 5000);
     });
+    atm.setState('free');
     this.emit('foundedAtm');
     this.atmTable.push(atm);
     this.atmUiTable.push(atmUI);
-    console.log(this.atmTable)
+    
   }
   removeAtm() {
     this.atmTable.pop();
     const UI = this.atmUiTable.pop();
     UI.emit('deleted', this.atmTable);
+    
     
   }
 
@@ -131,6 +139,11 @@ export default class AtmManager extends EventEmitter {
   start = () => {
     this.queue.on('queueCount', () => {
       this.startWork();
+        if (this.queue.getCount() > 10) {
+          this.addAtm();
+        }
+
     });
+
   }
 }
