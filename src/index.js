@@ -16,7 +16,7 @@ manager.start();
 // manager.queue.addPerson();
 
 
-manager.createQueue(1000, 2000);
+manager.createQueue(1000, 4000);
 
 
 //  let bancomat = new Atm();

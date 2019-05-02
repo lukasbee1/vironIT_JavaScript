@@ -1,23 +1,26 @@
 import EventEmitter from './EventEmitter';
+import Person from './Person';
 
 export default class Queue extends EventEmitter {
   constructor() {
     super();
-    this.count = 0;
+    this.personArray = [];
   }
 
   getCount() {
     // emit('queueCount', this.count);
-    return this.count;
+    return this.personArray.length - 1;
   }
 
   addPerson() {
-    this.count += 1;
+    const person = new Person();
+    person.setTimeWait(500, 8000);
+    this.personArray.push(person);
     this.emit('queueCount', this.count);
   }
 
   removePerson() {
-    this.count -= 1;
+    this.personArray.splice(0, 1);
     this.emit('queueCount', this.count);
   }
 }
