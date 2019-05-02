@@ -1,11 +1,11 @@
 // entry point
 import './css/style.css';
-import AtmManager from './components/AtmManager';
+import AtmManager from './js/components/AtmManager';
 
 
-let manager = new AtmManager();
+const manager = new AtmManager();
 
-//atmUI.renderATMs();
+
 manager.startLogging();
 manager.createAtmListener();
 manager.createRemoveButton();

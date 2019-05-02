@@ -1,30 +1,20 @@
-var path = require('path');
+const path = require('path');
 
 module.exports = {
-  mode: 'development',
-  entry: "./src/index.js",
+  entry: './src/index.js',
   output: {
-    // dist/ - by default
-    filename: "./bundle.js"
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist')
   },
   module: {
     rules: [
       {
         test: /\.js$/,
-        loader: 'babel-loader',
-        query: {
-          "presets": [
-            "@babel/preset-env",
-            
-          ],
-          "plugins": [
-            "@babel/plugin-proposal-class-properties"
-          ]
-        }
+        loader: 'babel-loader'
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
+        use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
       },
     ]
   },
@@ -32,5 +22,9 @@ module.exports = {
     contentBase: path.join(__dirname, "dist"),
     port: 3000
   },
-  watch: true
-}
+
+  stats: {
+    colors: true
+  },
+  devtool: 'source-map'
+};

@@ -10,28 +10,23 @@ export default class Atm extends EventEmitter {
   getState() {
     return this.state;
   }
+
   setState(state) {
     this.state = state;
   }
-  _free() {
+
+  free() {
     this.setState('free');
     this.emit('free', this.state);
   }
+
   getCount() {
     return this.count;
   }
-  
+
   working() {
     this.setState('busy');
     this.emit('busy', this.state);
-    this.count++;
+    this.count += 1;
   }
 }
-
-
-
-
-
-
-
-

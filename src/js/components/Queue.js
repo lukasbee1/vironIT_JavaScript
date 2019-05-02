@@ -5,18 +5,19 @@ export default class Queue extends EventEmitter {
     super();
     this.count = 0;
   }
-  
+
   getCount() {
-    //emit('queueCount', this.count);
+    // emit('queueCount', this.count);
     return this.count;
   }
+
   addPerson() {
-    this.count++;
+    this.count += 1;
     this.emit('queueCount', this.count);
   }
 
   removePerson() {
-    this.count--;
+    this.count -= 1;
     this.emit('queueCount', this.count);
   }
 }
