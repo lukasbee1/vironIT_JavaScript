@@ -1,24 +1,32 @@
 import EventEmitter from './EventEmitter';
 
+const emitter = new EventEmitter();
+const handler = jest.fn();
+
 test('check', () => {
-  const emitter = new EventEmitter();
-  const handler = jest.fn();
   emitter.on('e', handler);
   expect(emitter.eventTable).toHaveProperty('e');
 });
 
-test('subscribe', () => {
-  const emitter = new EventEmitter();
-  const fn = jest.fn();
-  emitter.on('event', fn);
-  emitter.emit('event');
-  expect(fn).toHaveBeenCalled();
+test('eventTable', () => {
+  emitter.emit('click', handler);
+  expect(emitter.eventTable.e).toContain(handler);
 });
 
-test('check111', () => {
-  const emitter = new EventEmitter();
-  const fn = jest.fn();
-  const unsub = emitter.on('event', fn);
-  unsub();
-  expect(emitter.eventTable.event).not.toContain(fn);
+test('remove from table', () => {
+  const handler2 = jest.fn();
+  const unsubscribe = emitter.on('name', handler2);
+  unsubscribe();
+  expect(emitter.eventTable.name).not.toContain(handler);
 });
+test('array', () => {
+  emitter.emit('e', 1);
+  expect(handler).toHaveBeenCalledWith(1);
+});
+
+test('check empty name', () => {
+  const handler2 = jest.fn();
+  emitter.on('e', handler2);
+  expect(emitter.eventTable.e).toContain(handler, handler2);
+});
+
