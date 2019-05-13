@@ -8,7 +8,6 @@ export default class Queue extends EventEmitter {
   }
 
   getCount() {
-    // emit('queueCount', this.count);
     return this.personArray.length;
   }
 

@@ -10,21 +10,16 @@ export default class AtmUI extends EventEmitter {
   drawAtm(atm) {
     const atmBlock = document.createElement('div');
     const entry = document.getElementsByClassName('atms');
-    this.atm = atmBlock;
     this.count = atm.getCount();
-
-    atmBlock.innerHTML = `<h1>ATM</h1>
-        ${atm.count}
-      `;
+    
+    atmBlock.innerHTML = `<h1>ATM</h1> ${atm.getCount()}`;
     atmBlock.setAttribute('class', 'atm free');
-    entry[0].appendChild(atmBlock);
+    this.atm = atmBlock;
+    entry[0].appendChild(this.atm);
   }
 
   changeCounter(atm) {
-    this.atm.innerHTML = `
-        <h1>ATM</h1>
-        ${atm.getCount()}
-      `;
+    this.atm.innerHTML = `<h1>ATM</h1> ${atm.getCount()}`;
   }
 
   setBusy() {
@@ -36,7 +31,10 @@ export default class AtmUI extends EventEmitter {
   }
 
   removeAtm() {
-    const entry = document.getElementsByClassName('atms');
-    entry[0].removeChild(this.atm);
+    const entry = document.getElementsByClassName('atms')[0];
+    const atm = document.getElementsByClassName('atm')[0];
+    if (atm) {
+      entry.removeChild(this.atm);
+    }
   }
 }

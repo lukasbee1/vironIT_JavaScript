@@ -29,17 +29,12 @@ export default class AtmManager extends EventEmitter {
   startLogging() {
     this.queue.on('queueCount', () => {
       this.logger.QueueUpdated(this.queue.getCount());
-      this.queueUI.updateQueue(this.queue.getCount());
     });
 
     this.atmTable.forEach((atm, i) => {
       atm.on('free', () => {
-        console.log('asdfasdfasdkjfhsadlfkjhsdlf');
         this.logger.AtmFree(this.queue.getCount(), i + 1);
       });
-    });
-
-    this.atmTable.forEach((atm, i) => {
       atm.on('busy', () => {
         this.logger.AtmBusy(i + 1);
       });
@@ -61,34 +56,35 @@ export default class AtmManager extends EventEmitter {
       const served = atm.getCount();
       atmUI.setFree();
       atmUI.changeCounter(atm);
+      this.startWork();
       setTimeout(() => {
-        if (atm.getState() === 'free' && served === atm.getCount()) {
-          console.log('aksjdhfa;lskjdhf;asdlfkj');
+        if (atm.getState() !== 'unworking' && atm.getState() === 'free' && served === atm.getCount()) {
           atmUI.removeAtm();
           this.removeAtm(atm, atmUI);
         }
       }, 4000);
-      this.startWork();
     });
     atm.on('busy', () => {
       atmUI.setBusy();
-      this.queue.removePerson();
       setTimeout(() => {
         if (!AtmManager.isFreeAtm(atm)) {
-          atm.free();
+          atm.setState('free');
         }
-      }, this.queue.personArray[0].getTimeWait());
+      }, this.queue.personArray[0].getTimeWait()); //bug 0 - index
+      this.queue.removePerson();
     });
     this.count += 1;
     atm.setState('free');
-    this.emit('foundedAtm');
     this.atmTable.push(atm);
     this.atmUiTable.push(atmUI);
+    this.emit('foundedAtm');
   }
 
   removeAtm(atm, atmUI) {
-    this.atmTable = this.atmTable.filter(a => a !== atm);
-    this.atmTableUI = this.atmTableUI.filter(a => a !== atmUI);
+    if (atm && atmUI) {
+      this.atmUiTable = this.atmUiTable.filter(a => a !== atmUI);
+      this.atmTable = this.atmTable.filter(a => a !== atm);
+    }
   }
 
   createAtmListener() {
@@ -109,7 +105,11 @@ export default class AtmManager extends EventEmitter {
     btn.setAttribute('class', 'btn');
     btn.setAttribute('id', 'addBtn');
     parent.appendChild(btn);
-    btn.addEventListener('click', () => this.removeAtm(this.atmTable.length - 1));
+    btn.addEventListener('click', () => {
+      this.atmTable[this.atmTable.length - 1].setState('unworking');
+      this.atmUiTable[this.atmUiTable.length - 1].removeAtm();
+      this.removeAtm(this.atmTable[this.atmTable.length - 1], this.atmUiTable[this.atmUiTable.length - 1]);
+    });
   }
 
   static isFreeAtm(atm) {
@@ -118,22 +118,23 @@ export default class AtmManager extends EventEmitter {
 
   startWork() {
     if (this.queue.getCount() > 0) {
-      const freeAtm = this.atmTable.find(AtmManager.isFreeAtm);
-      if (freeAtm) {
-        setTimeout(() => {
+      setTimeout(() => {
+        const freeAtm = this.atmTable.find(AtmManager.isFreeAtm);
+        if (freeAtm) {
           if (this.queue.getCount() > 0 && freeAtm.state === 'free') {
             freeAtm.working();
             if (this.atmTable[this.atmTable.length - 1].getState() === 'busy') {
               this.emit('allBusy');
             }
           }
-        }, 1000);
-      }
+        }
+      }, 1000);
     }
   }
 
   start() {
     this.queue.on('queueCount', () => {
+      this.queueUI.updateQueue(this.queue.getCount());
       this.startWork();
       if (this.queue.getCount() > 10) {
         setTimeout(() => {

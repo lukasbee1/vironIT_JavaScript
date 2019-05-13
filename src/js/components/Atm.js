@@ -15,13 +15,9 @@ export default class Atm extends EventEmitter {
     this.state = state;
     if (state === 'free') {
       this.emit('free', this.state);
-    } else {
+    } else if (state === 'busy') {
       this.emit('busy', this.state);
     }
-  }
-
-  free() {
-    this.setState('free');
   }
 
   getCount() {
