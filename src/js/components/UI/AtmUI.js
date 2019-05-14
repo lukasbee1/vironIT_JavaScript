@@ -11,7 +11,7 @@ export default class AtmUI extends EventEmitter {
     const atmBlock = document.createElement('div');
     const entry = document.getElementsByClassName('atms');
     this.count = atm.getCount();
-    
+
     atmBlock.innerHTML = `<h1>ATM</h1> ${atm.getCount()}`;
     atmBlock.setAttribute('class', 'atm free');
     this.atm = atmBlock;
@@ -31,10 +31,6 @@ export default class AtmUI extends EventEmitter {
   }
 
   removeAtm() {
-    const entry = document.getElementsByClassName('atms')[0];
-    const atm = document.getElementsByClassName('atm')[0];
-    if (atm) {
-      entry.removeChild(this.atm);
-    }
+    this.atm.remove();
   }
 }

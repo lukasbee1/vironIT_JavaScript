@@ -81,10 +81,8 @@ export default class AtmManager extends EventEmitter {
   }
 
   removeAtm(atm, atmUI) {
-    if (atm && atmUI) {
-      this.atmUiTable = this.atmUiTable.filter(a => a !== atmUI);
-      this.atmTable = this.atmTable.filter(a => a !== atm);
-    }
+    this.atmUiTable = this.atmUiTable.filter(a => a !== atmUI);
+    this.atmTable = this.atmTable.filter(a => a !== atm);
   }
 
   createAtmListener() {
@@ -103,7 +101,7 @@ export default class AtmManager extends EventEmitter {
     const parent = document.getElementById('down');
     btn.innerHTML = '<h2>Remove ATM</h2>';
     btn.setAttribute('class', 'btn');
-    btn.setAttribute('id', 'addBtn');
+    btn.setAttribute('id', 'removeBtn');
     parent.appendChild(btn);
     btn.addEventListener('click', () => {
       this.atmTable[this.atmTable.length - 1].setState('unworking');
@@ -120,12 +118,10 @@ export default class AtmManager extends EventEmitter {
     if (this.queue.getCount() > 0) {
       setTimeout(() => {
         const freeAtm = this.atmTable.find(AtmManager.isFreeAtm);
-        if (freeAtm) {
-          if (this.queue.getCount() > 0 && freeAtm.state === 'free') {
-            freeAtm.working();
-            if (this.atmTable[this.atmTable.length - 1].getState() === 'busy') {
-              this.emit('allBusy');
-            }
+        if (freeAtm && this.queue.getCount() > 0 && freeAtm.getState() === 'free') {
+          freeAtm.working();
+          if (this.atmTable[this.atmTable.length - 1].getState() === 'busy') {
+            this.emit('allBusy');
           }
         }
       }, 1000);
